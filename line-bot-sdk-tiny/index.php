@@ -30,9 +30,14 @@ echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
 
 $result = mysqli_query($link, "SELECT * FROM users");
 
+echo "<br>";
+echo "<br>";
+
 // Associative array
 $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
+echo "<pre>";
 print_r($data);
+echo "</pre>";
 
 // Free result set
 mysqli_free_result($result);
