@@ -36,8 +36,9 @@ echo "<br>";
 // Associative array
 $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
 foreach ($data as $key => $value) {
-	print_r(json_decode($data['events'], JSON_PRETTY_PRINT));
-	echo "<br>";
+	echo "<pre>";
+	print_r(json_decode($data['events'], true));
+	echo "</pre>";
 }
 
 // Free result set
