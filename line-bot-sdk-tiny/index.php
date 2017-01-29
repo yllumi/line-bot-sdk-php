@@ -28,4 +28,8 @@ if (!$link) {
 echo "Success: A proper connection to MySQL was made! The my_db database is great." . PHP_EOL;
 echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
 
+$result = mysqli_master_query($link, "SELECT * FROM users");
+$data = $result->fetch_array();
+print_r($data);
+
 mysqli_close($link);
