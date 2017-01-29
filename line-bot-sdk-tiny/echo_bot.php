@@ -49,32 +49,36 @@ foreach ($client->parseEvents() as $event) {
     }
 };
 
-echo "sipsip";
+$connectstr_dbhost = '';
+$connectstr_dbname = '';
+$connectstr_dbusername = '';
+$connectstr_dbpassword = '';
 
-$db = new mysqli('localhost', 'tebakode', 'bismillah', 'localdb');
-
-/*
- * This is the "official" OO way to do it,
- * BUT $connect_error was broken until PHP 5.2.9 and 5.3.0.
- */
-if ($db->connect_error) {
-    die('Connect Error (' . $db->connect_errno . ') '
-            . $db->connect_error);
+foreach ($_SERVER as $key => $value) {
+    if (strpos($key, "MYSQLCONNSTR_localdb") !== 0) {
+        continue;
+    }
+    
+    $connectstr_dbhost = preg_replace("/^.*Data Source=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbname = preg_replace("/^.*Database=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbusername = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
 }
 
-/*
- * Use this instead of $connect_error if you need to ensure
- * compatibility with PHP versions prior to 5.2.9 and 5.3.0.
- */
-if (mysqli_connect_error()) {
-    die('Connect Error (' . mysqli_connect_errno() . ') '
-            . mysqli_connect_error());
+$link = mysqli_connect($connectstr_dbhost, $connectstr_dbusername, $connectstr_dbpassword,$connectstr_dbname);
+
+if (!$link) {
+    echo "Error: Unable to connect to MySQL." . PHP_EOL;
+    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+    exit;
 }
 
-echo 'Success... ' . $db->host_info . "\n";
+echo "Success: A proper connection to MySQL was made! The my_db database is great." . PHP_EOL;
+echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
 
 // $data = json_encode(['satu','dua']);
 $data = json_encode($client->parseEvents());
-$result = $db->query("INSERT INTO events (events) VALUES ('$data')");
+$result = mysqli_query($db, "INSERT INTO events (events) VALUES ('$data')");
 
 $db->close();
