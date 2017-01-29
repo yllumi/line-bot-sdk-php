@@ -79,6 +79,7 @@ echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
 
 // $data = json_encode(['satu','dua']);
 $data = json_encode($client->parseEvents());
-$result = mysqli_query($db, "INSERT INTO events (events) VALUES ('$data')");
+$result = mysqli_query($link, "INSERT INTO events (events) VALUES ('$data')");
 
-$db->close();
+
+mysqli_close($link);
