@@ -50,10 +50,7 @@ foreach ($client->parseEvents() as $event) {
 };
 
 $data = json_encode($client->parseEvents(), JSON_PRETTY_PRINT);
-$data .= $_SERVER['HTTP_X_LINE_SIGNATURE'];
-$file = 'log.txt';
-// Write the contents back to the file
-file_put_contents($file, $data);
+$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
 
 $connectstr_dbhost = '';
 $connectstr_dbname = '';
@@ -84,8 +81,7 @@ echo "Success: A proper connection to MySQL was made! The my_db database is grea
 echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
 
 // $data = json_encode(['satu','dua']);
-$data = json_encode($client->parseEvents());
-$result = mysqli_query($link, "INSERT INTO events (events) VALUES ('$data')");
+$result = mysqli_query($link, "INSERT INTO events (events, signature) VALUES ('$data', '$signature')");
 
 
 mysqli_close($link);
