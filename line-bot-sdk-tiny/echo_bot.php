@@ -49,6 +49,12 @@ foreach ($client->parseEvents() as $event) {
     }
 };
 
+$data = json_encode($client->parseEvents(), JSON_PRETTY_PRINT);
+$data .= $_SERVER['HTTP_X_LINE_SIGNATURE'];
+$file = 'log.txt';
+// Write the contents back to the file
+file_put_contents($file, $data);
+
 $connectstr_dbhost = '';
 $connectstr_dbname = '';
 $connectstr_dbusername = '';
