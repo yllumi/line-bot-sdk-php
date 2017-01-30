@@ -51,6 +51,10 @@ foreach ($client->parseEvents() as $event) {
 
 $data = json_encode($client->parseEvents(), JSON_PRETTY_PRINT);
 $signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
+$file = 'log.txt';
+// Write the contents back to the file
+file_put_contents($file, $data."\n".$signature);
+
 
 $connectstr_dbhost = '';
 $connectstr_dbname = '';
@@ -68,7 +72,7 @@ foreach ($_SERVER as $key => $value) {
     $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
 }
 
-$link = mysqli_connect($connectstr_dbhost, $connectstr_dbusername, $connectstr_dbpassword,$connectstr_dbname);
+$link = mysqli_connect($connectstr_dbhost, $connectstr_dbusername, $connectstr_dbpassword, $connectstr_dbname);
 
 if (!$link) {
     echo "Error: Unable to connect to MySQL." . PHP_EOL;
